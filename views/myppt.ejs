@@ -2,28 +2,105 @@
 
 	<!-- Used to fade in a background when a specific slide state is reached -->
 	<div class="state-background"></div>
-	
+
 	<!-- Any section element inside of this container is displayed as a slide -->
 	<div class="slides">
 		<section>
-			<h1>My Presentation</h1>
-			<h3 class="inverted">This is slide 1 description</h3>
+			<h1>Using Webpack for Bundling Modules with Typescript</h1>
+			<h3 class="inverted"></h3>
 			<script>
 				// Delicously hacky. Look away.
 				if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) ) document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
 			</script>
 		</section>
-		
+
 		<section>
-			<h2>Slide 2</h2>
+			<h2>Why Webpack? Why Typescript?</h2>
 			<p>
-				Please update slide 2 description here.
+				synopsis:opinions and facts
+				<!-- 
+					Webpack is really the main feature of this talk
+					
+					is it right for you? At any level you can reap benefits using webpack or any package manager in general 
+					but ideally you only NEED to use it if you are writing massive javascript applications 
+					
+					is webpack the only js package manager on the block? 
+					No there has always been browsify, and more recently jspm with SystemJS. 
+					I chose webpack because I felt it matched our needs.
+
+					why use typescript with webpack? 
+					To acheive optimal flexibility, future proofing, and readability.
+				
+				-->
 			</p>
-			
+
 		</section>
+
+		<section>
+			<h2>What does Webpack it do?</h2>
+			<p>
+				Package Management
+				<ul>
+					<!-- reducing footprint via bundling. This includes removal of whitespace, concatenation and minification-->
+					<li>bundling of anything. (javascript,css,images,html)</li>
+					<li>handling file and order dependencies</li>
+				</ul>
+			</p>
+			<!--  -->
+		</section>
+		<!-- Example-->
+		<section>
+			<h2>how we start to include the client side code</h2>
+			<pre>
+				<code>
+&lt;head&gt;&#13;&#10;&#9;&#9;&#9;&#9;&#9;&#9;
+&#9;&lt;script src=&quot;this.js&quot;&gt;&lt;/script&gt;&#13;&#10;&#9;&#9;&#9;&#9;&#9;&#9;
+&#9;&lt;script src=&quot;that.js&quot;&gt;&lt;/script&gt;&#13;&#10;&#9;&#9;&#9;&#9;&#9;
+&lt;/head&gt;
+				</code>
+			</pre>
+		</section>
+		<!--
+			what it can evolve into: 
+			so we tried to order out code functionally in scripts. later this would all get bundled concatenated and then minified via home rolled server side logic
+			we still only had like 3 modules total and everything again seperated by functionality rather than feature
+			for transpiling we were using gulp to turn ts files into js files
+			finding things became harder and module dependencies needed to be explicitly declared. so if we ever wanted to port a portion of our code to another project it
+			would be difficult to know all the dependencies and also figuring out how much code need to go over.
+		-->
+		<section>
+			<h2>script growth example</h2>
+			<p><a href="https://github.com/ten24/slatwall/blob/d0cdc927ea2a3c4b560aba746740c5c1b705a5ca/admin/layouts/default.cfm#L540">scripts</a></p>
+			<p><a href="https://github.com/ten24/slatwall/tree/d0cdc927ea2a3c4b560aba746740c5c1b705a5ca/admin/client/js">folder structure</a></p>
+		</section>
+		<!-- 
+			webpack does all these things we needed
+			transpiling
+			linting to catch errors before they happen
+			concatenation
+			minifying
+			maintaing file ordering
+			now it's still possible to accomplish these things wiriting you own code or using server side tooling and with or with task runners like grunt and gulp if everthing is configured right
+			so you can think of webpack as a specialized type of task runner that runs on node and using commonjs syntax
+		-->
+		<section>
+			<h2>webpack and modular architecture to the rescue</h2>
+			<p><a href="https://github.com/ten24/slatwall/tree/master/org/Hibachi/client">modular structure</a></p>
+		</section>
+
+		<!--CLI live coding session 
+		mkdir 
+		cd
+		npm init
+		npm install
+		npm install webpack -g 
+		
+		-->
+
+
 		
 		<!-- Example of nested vertical slides -->
-		<section>
+		<!--<section>
 			<section>
 				<h2>Vertical Slides</h2>
 				<p>
@@ -63,24 +140,23 @@
 			<p>
 				Try it out! You can swipe through the slides pinch your way to the overview.
 			</p>
-		</section>
-
-	</div>
-
-	<!-- The navigational controls UI -->
-	<aside class="controls">
-		<a class="left" href="#">&#x25C4;</a>
-		<a class="right" href="#">&#x25BA;</a>
-		<a class="up" href="#">&#x25B2;</a>
-		<a class="down" href="#">&#x25BC;</a>
-	</aside>
-
-	<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
-	<div class="progress"><span></span></div>
+		</section>-->
+		<!-- #include virtual="/convert-pdf-to-html/includes/pdf-to-word-body-tag-02242014.htm" -->
 	
+
+
+
 </div>
 
+<!-- The navigational controls UI -->
+<aside class="controls">
+	<a class="left" href="#">&#x25C4;</a>
+	<a class="right" href="#">&#x25BA;</a>
+	<a class="up" href="#">&#x25B2;</a>
+	<a class="down" href="#">&#x25BC;</a>
+</aside>
 
+<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
+<div class="progress"><span></span></div>
 
-
-
+</div>
