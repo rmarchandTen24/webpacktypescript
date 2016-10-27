@@ -17,27 +17,27 @@
 		<section>
 			<h2>Why Webpack? Why Typescript?</h2>
 			<p>
-				synopsis:opinions and facts
-				<!-- 
+				SYNOPSIS: opinions and facts
+				<!--
 					Webpack is really the main feature of this talk
-					
-					is it right for you? At any level you can reap benefits using webpack or any package manager in general 
-					but ideally you only NEED to use it if you are writing massive javascript applications 
-					
-					is webpack the only js package manager on the block? 
-					No there has always been browsify, and more recently jspm with SystemJS. 
+
+					is it right for you? At any level you can reap benefits using webpack or any package manager in general
+					but ideally you only NEED to use it if you are writing massive javascript applications
+
+					is webpack the only js package manager on the block?
+					No there has always been browsify, and more recently jspm with SystemJS.
 					I chose webpack because I felt it matched our needs.
 
-					why use typescript with webpack? 
+					why use typescript with webpack?
 					To acheive optimal flexibility, future proofing, and readability.
-				
+
 				-->
 			</p>
 
 		</section>
 
 		<section>
-			<h2>What does Webpack it do?</h2>
+			<h2>What does Webpack do?</h2>
 			<p>
 				Package Management
 				<ul>
@@ -58,10 +58,10 @@
 &#9;&lt;script src=&quot;that.js&quot;&gt;&lt;/script&gt;&#13;&#10;&#9;&#9;&#9;&#9;&#9;
 &lt;/head&gt;
 				</code>
-			</pre>
+			</pre>-
 		</section>
 		<!--
-			what it can evolve into: 
+			what it can evolve into:
 			so we tried to order out code functionally in scripts. later this would all get bundled concatenated and then minified via home rolled server side logic
 			we still only had like 3 modules total and everything again seperated by functionality rather than feature
 			for transpiling we were using gulp to turn ts files into js files
@@ -73,7 +73,7 @@
 			<p><a href="https://github.com/ten24/slatwall/blob/d0cdc927ea2a3c4b560aba746740c5c1b705a5ca/admin/layouts/default.cfm#L540">scripts</a></p>
 			<p><a href="https://github.com/ten24/slatwall/tree/d0cdc927ea2a3c4b560aba746740c5c1b705a5ca/admin/client/js">folder structure</a></p>
 		</section>
-		<!-- 
+		<!--
 			webpack does all these things we needed
 			transpiling
 			linting to catch errors before they happen
@@ -88,17 +88,157 @@
 			<p><a href="https://github.com/ten24/slatwall/tree/master/org/Hibachi/client">modular structure</a></p>
 		</section>
 
-		<!--CLI live coding session 
-		mkdir 
+		<!--CLI live coding session
+		mkdir
 		cd
 		npm init
 		npm install
-		npm install webpack -g 
-		
+		npm install webpack -g
+		npm install webpack
+		add app.js code for document.write console.log
+		webpack app.js bundle.js
+		show the resulting bundle and how wepack lives in it
+
+		next progress into a config file which is just a commonjs module
+		add webpack.config.js
+		add new code to app.js to demonstrat using webpack command without input or output declared
+		module.exports = {
+			entry:"./app.js",
+			output:{
+				filename:"bundle.js"
+			}
+		}
+
+		demonstrate watch webpack --watch
+		add watch to the config
+		watch:true
+
+		add index.html
+		<html>
+
+			<body>
+				<script src="/bundle.js" /></script>
+			</body>
+
+		</html>
+
+		add dev server
+		npm install webpack-dev-server -g
+		webpack-dev-server --port 9999
+		http://localhost:9999/webpack-dev-server/index.html
+		show side by side code updating on dev
+
+		next show with multiple source files
+		add login.js and utils.js
+		require('./login') in app.js
+
+		demonstarte multiple files
+		entry:["./utils","./apps"]
+		restart dev server to pick up config file changes
+
+		demonstrate targeted output
+		entry:{
+        utils:"./utils.js",
+        bundle:"./app.js"
+		},
+		output:{
+			filename:"[name].bundle.js"
+		},
+
+		explain emitted vs rendered
+		webpack vs webpack-dev-server
+
+		revert to just one bundle
+
+		demonstrate loaders
+		webapck knows how to process, combine and minify files but not much else
+		loaders are an input and then output
+		open package.json
+		add devDependencies
+		"tsify": "*",
+    	"typescript": "*",
+		"ts-loader": "*",
+
+		add tsconfig.json
+		{
+			"compilerOptions": {
+				"target":"es5",
+				"module": "commonjs",
+				"sourceMap": true
+			}
+		}
+
+		rename login file to TS and add some es6 features and class and new class()
+
+		go to webpack config
+		add this
+		test is regex that tests what kind of files to run through the loader
+		,module:{
+			loaders:[
+				{
+					test:/\.ts$/,
+					exclude:/node_modules/,
+					loader:'ts-loader'
+				}
+			]
+		}
+
+		add resolve and explain by showing how extensions were not needed in app.js
+		,resolve:{
+			extensions:['','.js','.ts']
+		}
+		back to webpack-dev-server
+
+
+		explain how we already create roots with our task runners and how webpack replaces alot of functionality that grunt and gulp may have done before
+		add scripts to package.json
+
+		, "scripts":{
+			"start":"webpack-dev-server --port 9999"
+		}
+		this will allow you to add many bash commands and configurations in a simple aliased command and you can write bash that does more than just webpack
+
+		Production builds
+		seperating development from Production
+		minimize uglify
+		demonstrate
+		webpack -p
+		in a real environment you'll automate this and this solves minification but we probably also want to do other configs
+		write strip-loader into package.json
+		npm install strip-loader --save-dev
+
+		create file specifically for Production
+		webpack-production.js
+		I don't want to reinvent the wheel as production should override and extend development
+
+		var WebpackStrip = require('strip-loader')
+		var devConfig = require('./webpack.config');
+
+		var stripConsolelogs = {
+			exlude: /node_modules/,
+			loader: WebpackStrip.loader('console.log')
+		}
+
+		devConfig.module.loaders.push(stripConsolelogs);
+
+		module.exports=devConfig
+
+		demonstarte picking a config file and minifying
+
+		webpack --config webpack-production.js -p
+		show how console.logs were stripped
+
+		npm install http-server -g
+		http-server -p 9999
+		used to demonstrate production
+
+		so that's the basics of webpack
+
+		same applies for building css whether concatenating them to building less css
+		building images and fonts
+
 		-->
 
-
-		
 		<!-- Example of nested vertical slides -->
 		<!--<section>
 			<section>
@@ -141,8 +281,8 @@
 				Try it out! You can swipe through the slides pinch your way to the overview.
 			</p>
 		</section>-->
-		<!-- #include virtual="/convert-pdf-to-html/includes/pdf-to-word-body-tag-02242014.htm" -->
-	
+
+
 
 
 
